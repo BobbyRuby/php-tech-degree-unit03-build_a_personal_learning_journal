@@ -1,7 +1,7 @@
 <?php
 include('inc/debug_functions.php');
+include('inc/functions.php');
 include('model/Class_SqliteCommunicator.php');
-include('model/functions.php');
 // Create connection
 $sqlCom = new Class_SqliteCommunicator();
 $sqlCom->setDsn(__DIR__.'/inc/journal.db');
@@ -38,29 +38,58 @@ if( isNewEntry() ):
         <div class="container">
             <div class="new-entry">
                 <h2>New Entry</h2>
-<!-- Once added the entry will be processed and displayed -->
                 <form action="new.php" method="post">
 
 <?php elseif ( isEditEntry() ):
-    // Get current entry ID from GET
-    $entryID = filter_input(INPUT_GET, 'entryID',  FILTER_VALIDATE_INT) ?>
-    <section>
+    if( ! empty($_GET) ) {
+        // Get entryID from GET
+        $entryID = filter_input(INPUT_GET, 'entryID', FILTER_VALIDATE_INT);
+        $entryData = $sqlCom->getSingleRow($entryID);
+    ?>
+        <section>
         <div class="container">
             <div class="edit-entry">
-            <h2>Edit Entry ID# <?php echo $entryID ?></h2>
-            <!-- Once edits are performed the entry will be processed and displayed -->
-            <form action="detail.php" method="post">
+                <h2>Edit Entry ID# <?php echo $entryID ?></h2>
+                <form action="edit.php?entryID=<?php echo $entryID ?>" method="post">
+<?php
+    } else {
+        // Not from GET, is it from POST?
+        if( empty($_POST) ){
+            // Where you come from?  Redirect to index.php
+            // Redirect to detail page using newly inserted id
+            header("Location: ./index.php");
+            exit;
+        }
+    }
+?>
+
 
 <?php elseif ( isEntryDetail() ):
-    if( ! empty($_POST) ){
-        // Process edit or new entry
-    }
+    if( ! empty($_GET) ) {
+        // Get entryID from GET
+        $entryID = filter_input(INPUT_GET, 'entryID', FILTER_VALIDATE_INT);
 
-    ?>
+        if( ! empty($_GET['delete']) && $_GET['delete'] === 'yes' ){
+            $sqlCom->deleteEntry($entryID);
+        }
+
+        $entryData = $sqlCom->getSingleRow($entryID);
+        ?>
     <section>
-    <div class="container">
-        <div class="entry-list single">
-            <article>
+        <div class="container">
+            <div class="entry-list single">
+                <article>
+    <?php
+    } else {
+        // Not from GET, is it from POST?
+        if( empty($_POST) ){
+            // Where you come from?  Redirect to index.php
+            // Redirect to detail page using newly inserted id
+            header("Location: ./index.php");
+            exit;
+        }
+    }
+    ?>
 
 <?php else: // (index.php) ?>
     <section>

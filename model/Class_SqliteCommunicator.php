@@ -125,10 +125,42 @@ class Class_SqliteCommunicator
                 $prepared = $this->getPdo()->prepare($sql);
             endif;
         }
-        catch (Exception $e){
+        catch (PDOException $e){
             echo $e->getMessage();
         }
         // Execute statement and return array index 0 = TRUE or FALSE & index 1 = PDOStatement Object
         return [$prepared->execute($args), $prepared];
+    }
+
+    /**
+     * Query db for a single row in associative format using entryID passed
+     * @return array entryData
+     */
+    public function getSingleRow($entryID)
+    {
+        $pdoSObj = $this->prepareAndExecuteStatement('SELECT * FROM entries WHERE id = ?', [$entryID]);
+        $entryData = $pdoSObj[1]->fetch(PDO::FETCH_ASSOC);
+        return $entryData;
+    }
+
+    public function updateEntry($entryID, $updateData){
+        // Push entryID onto updateData array for WHERE ?
+        $updateData [] = $entryID;
+        $this->prepareAndExecuteStatement(
+            'UPDATE entries SET title = ?, date = ?, time_spent = ?, learned = ?, resources = ?
+            WHERE id = ?',
+            $updateData
+        );
+        // Redirect to detail page using newly inserted id
+        header("Location: ./detail.php?entryID=$entryID");
+    }
+
+    public function deleteEntry($entryID){
+        $this->prepareAndExecuteStatement(
+            'DELETE FROM entries WHERE id = ?',
+            [$entryID]
+        );
+        // Redirect to detail page using newly inserted id
+        header("Location: ./index.php");
     }
 }

@@ -7,6 +7,7 @@
 body {
 	font-size: 16px;
 	color: #404a49;
+	background-color: #58545373;
 	font-family: 'Cousine', serif;
 	font-weight: 400;
 }
@@ -19,7 +20,7 @@ header .site-header {
 	height: 95px;
 }
 header .logo i {
-	color: #678f89;
+	color: #fffff0;
 	margin: 20px 0 0 -5px;
 	float: left;
 	font-size: 40px;
@@ -31,7 +32,7 @@ header .button {
 footer {
 	text-align: center;
 	padding: 35px 0;
-	border-top: 2px dotted #678f89;
+	border-top: 2px dotted #fffff0;;
 }
 
 
@@ -42,11 +43,11 @@ footer {
 
 .button {
 	padding: 8px 10px 6px 10px;
-	background: #678f89;
-	border: 2px solid #678f89;
+	background: #ffffff;
+	border: 2px inset #000000;
 	border-radius: 4px;
 	text-decoration: none;
-	color: #FFF;
+	color: #000000;
 	position: relative;
 	text-align: center;
 	font-size: 14px;
@@ -78,6 +79,39 @@ footer {
 	outline: 0;
 }
 
+@keyframes condense {
+	0% {
+		transform: scaleX(1.25);
+	}
+	100% {
+		transform: scaleX(1);
+	}
+}
+@keyframes expand {
+	0% {
+		transform: scaleX(1);
+	}
+	100% {
+		transform: scaleX(1.25);
+	}
+}
+
+a.button{
+	animation: condense 1s 1;
+	transform: scaleX(1);
+	transition: 1s;
+}
+
+.button:hover{
+	color: green;
+	animation: expand 1s 1;
+	transform: scaleX(1.25);
+	transition: 1s;
+}
+
+.red:hover{
+	color: red;
+}
 
 
 /* ==========================================================================
@@ -91,6 +125,7 @@ h3 {
 	font-weight: 400;
 	line-height: 1em;
 	color: #000;
+	font-style: italic;
 }
 h1 {
 	font-size: 44px;
@@ -114,9 +149,9 @@ p {
 	font-size: 18px;
 }
 p a {
-	border-bottom: 2px solid #678f89;
+	border-bottom: 2px solid #ffffff;
 	padding: 0;
-	color: #678f89;
+	color: #ffffff;
 	text-decoration: none;
 }
 ul li {
@@ -124,9 +159,9 @@ ul li {
 	font-size: 18px;
 }
 ul li a {
-	border-bottom: 2px solid #678f89;
+	border-bottom: 2px solid #000;
 	line-height: 1.8em;
-	color: #678f89;
+	color: #000;
 	text-decoration: none;
 }
 
@@ -135,6 +170,14 @@ ul li a {
 /* ==========================================================================
    Page Styles
    ========================================================================== */
+
+.entry-list{
+	color: #555;
+	font-size: 22px;
+	padding: 0 !important;
+	font-family: courier, monospace;
+	border: 1px solid #dedede;
+}
 
 .entry-list,
 .edit-entry,
@@ -148,8 +191,13 @@ ul li a {
 	margin-bottom: 35px;
 }
 .entry-list article {
-	margin-bottom: 70px;
+	margin-bottom: 0px;
 	text-align: center;
+	list-style: none;
+	border-bottom: 1px dotted #ccc;
+	height: auto;
+	padding: 10px;
+	background-color: ivory;
 }
 .entry-list article:last-child {
 	margin-bottom: 0;
@@ -180,9 +228,13 @@ ul li a {
 	font-weight: 400;
 	text-transform: uppercase;
 	font-size: 18px;
+	display: inline-block;
 }
-
-
+.edit-entry{
+	background: #fffff0;
+	padding-right: 10px;
+	padding-left: 10px;
+}
 
 /* ==========================================================================
    Form Styles
@@ -210,12 +262,12 @@ form input[type=date]:focus,
 form input[type=password]:focus,
 form textarea:focus {
 	outline: 0;
-	border-color: #678f89;
+	border-color: #fffff0;
 }
 form input[type=text]:hover,
 form input[type=date]:hover
 form textarea:hover {
-	border-color: #678f89;
+	border-color: #fffff0;
 }
 .edit-entry form textarea,
 .new-entry form textarea {
@@ -224,17 +276,3 @@ form textarea:hover {
 input[type=submit] {
 	margin-right: 5px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

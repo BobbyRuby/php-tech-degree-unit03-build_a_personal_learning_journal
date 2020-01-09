@@ -1,12 +1,8 @@
 <?php
 include('header.php');
 
-// Get entryID from GET
 
-$entryID = filter_input(INPUT_GET, 'entryID', FILTER_VALIDATE_INT);
-
-$pdoSObj = $sqlCom->prepareAndExecuteStatement('SELECT * FROM entries WHERE id = ?', [$entryID]);
-$entryData = $pdoSObj[1]->fetch(PDO::FETCH_ASSOC); ?>
+?>
 
                     <h1><?php echo $entryData['title'] ?></h1>
                     <time datetime="<?php echo $entryData['date'] ?>"><?php echo convertDateTime($entryData['date']) ?></time>
@@ -26,7 +22,18 @@ $entryData = $pdoSObj[1]->fetch(PDO::FETCH_ASSOC); ?>
                             if ( count($resources) >= 1 && $resources[0] != FALSE):
                                 // Resources exist so loop through and display
                                 foreach ( $resources as $resource) {
-                                    echo '<li><a target="_blank" href="'. $resource . '">' . $resource . '</a></li>';
+                                    // No http
+                                    if( strpos($resource, 'http') === FALSE ) :
+                                        // Has valid web extension
+                                        if( preg_match('/^(?!\-)(?:(?:[a-zA-Z\d][a-zA-Z\d\-]{0,61})?[a-zA-Z\d]\.){1,126}(?!\d+)[a-zA-Z\d]{1,63}$/',$resource, $matches ) ) { // Thanks for Regex - Onur Yıldırım - https://stackoverflow.com/questions/3026957/how-to-validate-a-domain-name-using-regex-php
+                                            $resource = 'http://' . $resource;
+                                            echo '<li><a target="_blank" href="'. $resource . '">' . $resource . '</a></li>';
+                                        } else {
+                                            // No link needed - Not a website
+                                            echo '<li>' . $resource . '</li>';
+                                        }
+                                    endif;
+
                                }
                             else:
                                 // Resources do not exist
@@ -39,7 +46,11 @@ $entryData = $pdoSObj[1]->fetch(PDO::FETCH_ASSOC); ?>
             </div>
         </div>
         <div class="edit">
-            <p><a href="./edit.php?entryID=1">Edit Entry</a></p>
+            <p><a class="button" href="./edit.php?entryID=<?php echo $entryID ?>">Edit Entry</a></p>
+            <p><a class="button red" href="./detail.php?delete=yes&entryID=<?php echo $entryID ?>"
+                  onclick="return confirm('Are you sure you want to delete this entry?')">
+                Delete Entry
+                </a></p>
         </div>
     </section>
 <?php
