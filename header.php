@@ -2,11 +2,10 @@
 include('inc/debug_functions.php');
 include('model/Class_SqliteCommunicator.php');
 include('model/functions.php');
-$dir = dirname(__FILE__);
 // Create connection
-$sqlCon = new Class_SqliteCommunicator($dir.'inc/journal.db');
-if( $sqlCon->setPdo() )
-    rfd_debugger($sqlCon->getPdo());
+$sqlCom = new Class_SqliteCommunicator();
+$sqlCom->setDsn(__DIR__.'/inc/journal.db');
+$sqlCom->setPdo();
 
 ?>
 <!DOCTYPE html>
@@ -40,7 +39,7 @@ if( isNewEntry() ):
             <div class="new-entry">
                 <h2>New Entry</h2>
 <!-- Once added the entry will be processed and displayed -->
-                <form action="detail.php" method="post">
+                <form action="new.php" method="post">
 
 <?php elseif ( isEditEntry() ):
     // Get current entry ID from GET
@@ -67,6 +66,4 @@ if( isNewEntry() ):
     <section>
         <div class="container">
             <div class="entry-list">
-                <article>
-
 <?php endif;

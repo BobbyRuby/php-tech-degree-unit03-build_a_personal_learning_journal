@@ -37,3 +37,11 @@ function isEntryDetail()
     }
     return FALSE;
 }
+
+/**
+ * Convert to readable form per requirement of this project
+ * @param $dateTime
+ */
+function convertDateTime($dateTime){
+    return date_format(date_create($dateTime), 'F d Y');
+}
