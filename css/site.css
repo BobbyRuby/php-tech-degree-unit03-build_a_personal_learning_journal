@@ -7,7 +7,7 @@
 body {
 	font-size: 16px;
 	color: #404a49;
-	background-color: #58545373;
+	background-color: #5bc4d442;
 	font-family: 'Cousine', serif;
 	font-weight: 400;
 }
@@ -51,6 +51,9 @@ footer {
 	position: relative;
 	text-align: center;
 	font-size: 14px;
+	animation: condense 1s 1;
+	transform: scaleX(1);
+	transition: 1s;
 }
 .button.button-secondary {
 	background: #FFF;
@@ -75,8 +78,10 @@ footer {
 	top: 3px;
 	left: 3px;
 }
-.button:focus {
-	outline: 0;
+
+.button-container {
+	margin: 0 auto;
+	text-align: center;
 }
 
 @keyframes condense {
@@ -94,12 +99,6 @@ footer {
 	100% {
 		transform: scaleX(1.25);
 	}
-}
-
-a.button{
-	animation: condense 1s 1;
-	transform: scaleX(1);
-	transition: 1s;
 }
 
 .button:hover{
@@ -130,9 +129,11 @@ h3 {
 h1 {
 	font-size: 44px;
 	margin-bottom: 12px;
+	text-align: center;
 }
 h2 {
 	font-size: 32px;
+	text-align: center;
 }
 h2 a {
 	text-decoration: none;
@@ -230,10 +231,30 @@ ul li a {
 	font-size: 18px;
 	display: inline-block;
 }
-.edit-entry{
+.edit-entry, .new-entry{
 	background: #fffff0;
 	padding-right: 10px;
 	padding-left: 10px;
+}
+
+ul.tags {
+	overflow: hidden;
+}
+
+ul.tags li{
+	list-style-type: none;
+	float: left;
+	margin-right: 10px;
+}
+
+ul.tags a{
+	color: cornflowerblue;
+	display: inline-block;
+}
+
+ul.tags a:hover{
+	margin-right: 15px;
+	margin-left: 15px;
 }
 
 /* ==========================================================================

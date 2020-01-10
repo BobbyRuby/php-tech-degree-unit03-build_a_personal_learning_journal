@@ -2,16 +2,23 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="33d0cea6-dd41-4ba0-907e-1009ed69feaa" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/inc/Class_JournalCommunicator.php" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/tagEntries.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/css/site.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/site.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/detail.php" beforeDir="false" afterPath="$PROJECT_DIR$/detail.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/edit.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/header.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/inc/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/functions.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/inc/journal.db" beforeDir="false" afterPath="$PROJECT_DIR$/inc/journal.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/index.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/Class_SqliteCommunicator.php" beforeDir="false" afterPath="$PROJECT_DIR$/model/Class_SqliteCommunicator.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model/functions.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/functions.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/Class_SqliteCommunicator.php" beforeDir="false" afterPath="$PROJECT_DIR$/inc/Class_SqliteCommunicator.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new.php" beforeDir="false" afterPath="$PROJECT_DIR$/new.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/viewHtml/detail.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/viewHtml/edit.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/viewHtml/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/viewHtml/new.html" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -120,7 +127,7 @@
       <workItem from="1578405128935" duration="1941000" />
       <workItem from="1578449303516" duration="19723000" />
       <workItem from="1578531690996" duration="1705000" />
-      <workItem from="1578533413213" duration="22098000" />
+      <workItem from="1578533413213" duration="56296000" />
     </task>
     <servers />
   </component>
@@ -139,16 +146,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="php">
-          <url>file://$PROJECT_DIR$/model/Class_SqliteCommunicator.php</url>
-          <line>121</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

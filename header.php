@@ -1,11 +1,12 @@
 <?php
 include('inc/debug_functions.php');
 include('inc/functions.php');
-include('model/Class_SqliteCommunicator.php');
+include('inc/Class_SqliteCommunicator.php');
+include('inc/Class_JournalCommunicator.php');
 // Create connection
-$sqlCom = new Class_SqliteCommunicator();
+$sqlCom = new Class_JournalCommunicator();
 $sqlCom->setDsn(__DIR__.'/inc/journal.db');
-$sqlCom->setPdo();
+$sqlCom->setPdoConnection();
 
 ?>
 <!DOCTYPE html>
@@ -19,6 +20,52 @@ $sqlCom->setPdo();
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/site.css">
+    <?php
+    if( isNewEntry() || isEditEntry() ):
+        // Get entryID from GET
+        $entryID = ( isEditEntry() ) ? filter_input(INPUT_GET, 'entryID', FILTER_VALIDATE_INT) : NULL;
+    ?>
+    <script>
+        // Begin event listener to detect if all of the DOM has been loaded
+        document.addEventListener("DOMContentLoaded",
+        // Decide which version of the JS function to output
+        <?php if( isEditEntry() ) { ?>
+        // Edit function and redirect
+        function(){
+            // DOM is fully loaded
+            var form = document.querySelector('#form-edit');
+            var url = window.location.href;
+            form.addEventListener('submit', function (event) {
+                // This bit of JS picked up from reading this Answer from "gdoron is supporting Monica" at StackOverflow - > https://stackoverflow.com/questions/11277989/how-to-get-the-focused-element-with-jquery
+                var focused = document.activeElement;
+                if( focused.getAttribute('value') === 'Cancel' ) {
+                    event.preventDefault();
+                    if (confirm('Are you sure you do not want to edit this entry?')) window.location.href = url.replace('edit.php', 'detail.php');
+                }
+            })
+        });
+    <?php
+        }
+        else if( isNewEntry() ){ ?>
+        // New function and redirect
+        function(){
+            // DOM is fully loaded
+            var form = document.querySelector('#form-new');
+            var url = window.location.href;
+            form.addEventListener('submit', function (event) {
+                // This bit of JS picked up from reading this Answer from "gdoron is supporting Monica" at StackOverflow - > https://stackoverflow.com/questions/11277989/how-to-get-the-focused-element-with-jquery
+                var focused = document.activeElement;
+                if( focused.getAttribute('value') === 'Cancel' ) {
+                    event.preventDefault();
+                    if (confirm('Are you sure you do not want to add this new entry?')) window.location.href = url.replace('new.php', 'index.php');
+                }
+            })
+        });
+    <?php
+        }
+    endif;
+    ?>
+    </script>
 </head>
 <body>
 <header>
@@ -27,6 +74,7 @@ $sqlCom->setPdo();
             <a class="logo" href="index.php"><i class="material-icons">library_books</i></a>
             <a class="button icon-right" href="new.php"><span>New Entry</span> <i class="material-icons">add</i></a>
         </div>
+        <h1>My Journal</h1>
     </div>
 </header>
 <?php
@@ -38,42 +86,33 @@ if( isNewEntry() ):
         <div class="container">
             <div class="new-entry">
                 <h2>New Entry</h2>
-                <form action="new.php" method="post">
+                <form action="new.php" method="post" id="form-new">
 
 <?php elseif ( isEditEntry() ):
     if( ! empty($_GET) ) {
-        // Get entryID from GET
-        $entryID = filter_input(INPUT_GET, 'entryID', FILTER_VALIDATE_INT);
-        $entryData = $sqlCom->getSingleRow($entryID);
     ?>
         <section>
         <div class="container">
             <div class="edit-entry">
                 <h2>Edit Entry ID# <?php echo $entryID ?></h2>
-                <form action="edit.php?entryID=<?php echo $entryID ?>" method="post">
+                <form action="edit.php?entryID=<?php echo $entryID ?>" method="post" id="form-edit">
 <?php
     } else {
         // Not from GET, is it from POST?
         if( empty($_POST) ){
             // Where you come from?  Redirect to index.php
-            // Redirect to detail page using newly inserted id
             header("Location: ./index.php");
             exit;
         }
     }
-?>
-
-
-<?php elseif ( isEntryDetail() ):
+ elseif ( isEntryDetail() ):
     if( ! empty($_GET) ) {
-        // Get entryID from GET
-        $entryID = filter_input(INPUT_GET, 'entryID', FILTER_VALIDATE_INT);
-
-        if( ! empty($_GET['delete']) && $_GET['delete'] === 'yes' ){
-            $sqlCom->deleteEntry($entryID);
-        }
-
-        $entryData = $sqlCom->getSingleRow($entryID);
+        if ( ! empty($_GET['error']) &&  $_GET['error'] === 'no_entry'  ) : ?>
+          <div id="error">
+              <p>That entry could not be found, displayed here is the one you came from.</p>
+          </div>
+    <?php
+        endif;
         ?>
     <section>
         <div class="container">
@@ -84,14 +123,21 @@ if( isNewEntry() ):
         // Not from GET, is it from POST?
         if( empty($_POST) ){
             // Where you come from?  Redirect to index.php
-            // Redirect to detail page using newly inserted id
             header("Location: ./index.php");
             exit;
         }
     }
+    elseif ( isTagEntries() ) :
+    // Get reference to the tag
+    $tagID = filter_input(INPUT_GET, 'tagID', FILTER_VALIDATE_INT);
+    $tag = $sqlCom->getAssocRowById($tagID, 'tags');
     ?>
-
-<?php else: // (index.php) ?>
+    <section>
+    <h2>Entries for tag "<?php echo $tag['name'] ?>"</h2>
+        <div class="container">
+            <div class="entry-list">
+<?php
+    else: // (index.php) ?>
     <section>
         <div class="container">
             <div class="entry-list">
