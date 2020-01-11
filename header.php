@@ -20,52 +20,6 @@ $sqlCom->setPdoConnection();
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css">
     <link rel="stylesheet" href="css/site.css">
-    <?php
-    if( isNewEntry() || isEditEntry() ):
-        // Get entryID from GET
-        $entryID = ( isEditEntry() ) ? filter_input(INPUT_GET, 'entryID', FILTER_VALIDATE_INT) : NULL;
-    ?>
-    <script>
-        // Begin event listener to detect if all of the DOM has been loaded
-        document.addEventListener("DOMContentLoaded",
-        // Decide which version of the JS function to output
-        <?php if( isEditEntry() ) { ?>
-        // Edit function and redirect
-        function(){
-            // DOM is fully loaded
-            var form = document.querySelector('#form-edit');
-            var url = window.location.href;
-            form.addEventListener('submit', function (event) {
-                // This bit of JS picked up from reading this Answer from "gdoron is supporting Monica" at StackOverflow - > https://stackoverflow.com/questions/11277989/how-to-get-the-focused-element-with-jquery
-                var focused = document.activeElement;
-                if( focused.getAttribute('value') === 'Cancel' ) {
-                    event.preventDefault();
-                    if (confirm('Are you sure you do not want to edit this entry?')) window.location.href = url.replace('edit.php', 'detail.php');
-                }
-            })
-        });
-    <?php
-        }
-        else if( isNewEntry() ){ ?>
-        // New function and redirect
-        function(){
-            // DOM is fully loaded
-            var form = document.querySelector('#form-new');
-            var url = window.location.href;
-            form.addEventListener('submit', function (event) {
-                // This bit of JS picked up from reading this Answer from "gdoron is supporting Monica" at StackOverflow - > https://stackoverflow.com/questions/11277989/how-to-get-the-focused-element-with-jquery
-                var focused = document.activeElement;
-                if( focused.getAttribute('value') === 'Cancel' ) {
-                    event.preventDefault();
-                    if (confirm('Are you sure you do not want to add this new entry?')) window.location.href = url.replace('new.php', 'index.php');
-                }
-            })
-        });
-    <?php
-        }
-    endif;
-    ?>
-    </script>
 </head>
 <body>
 <header>
@@ -90,6 +44,7 @@ if( isNewEntry() ):
 
 <?php elseif ( isEditEntry() ):
     if( ! empty($_GET) ) {
+    $entryID = filter_input(INPUT_GET, 'entryID', FILTER_VALIDATE_INT);
     ?>
         <section>
         <div class="container">

@@ -39,7 +39,7 @@ endif;
                         <input type="submit" value="Process Edits for Entry" class="button save"/>
                         <br/>
                         <br/>
-                        <input type="submit" value="Cancel" class="button red cancel"/>
+                        <a href="./detail.php?entryID=<?php echo $entryID ?>" class="button red cancel">Cancel</a>
                     </div>
                 </form>
             </div>

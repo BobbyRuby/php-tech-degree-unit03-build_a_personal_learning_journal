@@ -54,6 +54,7 @@ footer {
 	animation: condense 1s 1;
 	transform: scaleX(1);
 	transition: 1s;
+	display: inline-block;
 }
 .button.button-secondary {
 	background: #FFF;

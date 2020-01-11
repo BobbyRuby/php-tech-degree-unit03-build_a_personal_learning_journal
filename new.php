@@ -27,9 +27,10 @@ if( ! empty($_POST) ){
                 <label for="tags">Tags( 1 per line )</label>
                 <textarea id="tags" rows="5" name="tags"></textarea>
                 <div class="button-container">
-                    <input type="submit" value="Publish Entry" class="button save"/>
-                    <br/><br/>
-                    <input type="submit" value="Cancel" class="button red cancel"/>
+                    <input type="submit" value="Add New Entry" class="button save"/>
+                    <br/>
+                    <br/>
+                    <a href="./index.php" class="button red cancel">Cancel</a>
                 </div>
             </form>
         </div>
