@@ -8,8 +8,8 @@ foreach ($entryIDs as $entryID ) {
     $row = $sqlCom->getAssocRowById( $entryID, 'entries' );
     ?>
     <article>
-        <h2><a href="detail.php?entryID=<?php echo $row['id'] ?>"><?php echo $row['title'] ?></a></h2>
-        <time datetime="<?php echo $row['date'] ?>"><?php echo $row['date'] ?></time>
+        <h2><a href="detail.php?entryID=<?php echo $row['id'] ?>&tagID=<?php echo $tag['id'] ?>"><?php echo $row['title'] ?></a></h2>
+        <time datetime="<?php echo $row['date'] ?>"><?php if ( ! empty ($row['date']) ) : echo convertDateTime($row['date']); else: echo 'No date recored'; endif; ?></time>
         <ul class="tags">
             <?php
             $tags = $sqlCom->getTagsForEntry($row['id']);

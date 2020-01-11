@@ -6,7 +6,7 @@ if( is_array($rows) && count($rows) ):
     foreach( $rows as $row ){ ?>
         <article>
             <h2><a href="detail.php?entryID=<?php echo $row['id'] ?>"><?php echo $row['title'] ?></a></h2>
-            <time datetime="<?php echo $row['date'] ?>"><?php echo $row['date'] ?></time>
+            <time datetime="<?php echo $row['date'] ?>"><?php if ( ! empty ($row['date']) ) : echo convertDateTime($row['date']); else: echo 'No date recored'; endif; ?></time>
             <ul class="tags">
             <?php
             $tags = $sqlCom->getTagsForEntry($row['id']);

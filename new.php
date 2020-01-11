@@ -1,11 +1,14 @@
 <?php
     include('header.php');
 if( ! empty($_POST) ){
-    // Obtain filtered references to $tags table data and entry table data
-    list($tags, $entryTableData) = prepareDataForDbUpdate($_POST);
+    // Obtain filtered references to tags table data and entry table data
+    list($tagNames, $entryTableData) = prepareDataForDbUpdate($_POST);
     // If entry inserted successfully
-    if( $insertId = $sqlCom->insertEntry($entryTableData) && ! empty($tags) ) :
-        $sqlCom->insertOrUpdateTags( $entryID, $tags );
+    if( $insertId = $sqlCom->insertEntry($entryTableData) ) :
+        // There are tags
+        if ( ! empty($tagNames) ):
+            $sqlCom->insertOrUpdateTag( $entryID, $tagNames, TRUE );
+        endif;
     endif;
     // Redirect to detail page using newly inserted entry
     header("Location: ./detail.php?entryID=$insertId");

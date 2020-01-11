@@ -66,17 +66,17 @@ function convertDateTime($dateTime){
  */
 function prepareDataForDbUpdate(array $_post)
 {
-// loop through post data and set up sql to insert the new entry
+    // loop through post data and set up sql to insert the new entry
     foreach ($_post as $key => $item) {
         $item = filter_input(INPUT_POST, $key, FILTER_SANITIZE_STRING);
         // Tags textarea?
         if ($key === 'tags'):
-            // Get reference to tags
-            $tags = preg_split('/\r\n|[\r\n]/', $item);
+            // Get reference to tagNames
+            $tagNames = preg_split('/\r\n|[\r\n]/', $item);
         else:
             // No - Get entry data item
             $entryTableData[] = $item;
         endif;
     }
-    return array($tags, $entryTableData);
+    return array($tagNames, $entryTableData);
 }

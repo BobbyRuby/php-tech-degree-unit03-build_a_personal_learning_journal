@@ -106,13 +106,30 @@ if( isNewEntry() ):
         }
     }
  elseif ( isEntryDetail() ):
+    // Set what we need for header area
+    $no_entries_error = filter_input(INPUT_GET, 'no_entries_error', FILTER_VALIDATE_BOOLEAN);
+    $tagID = filter_input(INPUT_GET, 'tagID', FILTER_VALIDATE_INT);
+    $tag = $sqlCom->getAssocRowById($tagID, 'tags');
+
     if( ! empty($_GET) ) {
-        if ( ! empty($_GET['error']) &&  $_GET['error'] === 'no_entry'  ) : ?>
-          <div id="error">
-              <p>That entry could not be found, displayed here is the one you came from.</p>
-          </div>
-    <?php
-        endif;
+        if ( $no_entries_error ) {
+            if (!$tagID):
+                ?>
+                <div id="error">
+                    <p>No more entries in that direction! <br/>
+                        <a href="./index.php">Click here to return to the index!</a>
+                    </p>
+                </div>
+            <?php
+            else: ?>
+                <div id="error">
+                    <p>No more entries in that direction tagged as "<?php echo $tag['name'] ?>"!<br/>
+                        <a href="./tagEntries.php?tagID=<?php echo $tagID ?>">Click here to return to the tag "<?php echo $tag['name'] ?>" index!</a>
+                    </p>
+                </div>
+                <?php
+            endif;
+        }
         ?>
     <section>
         <div class="container">

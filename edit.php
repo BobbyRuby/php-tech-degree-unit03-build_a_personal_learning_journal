@@ -3,12 +3,12 @@ include('header.php');
 $entryData = $sqlCom->getAssocRowById($entryID, 'entries');
 if( ! empty($_POST) ):
     // Obtain filtered references to tags table data and entry table data
-    list($tags, $entryTableData) = prepareDataForDbUpdate($_POST);
+    list($tagNames, $entryTableData) = prepareDataForDbUpdate($_POST);
     // Update successful
     if ( $sqlCom->updateEntry($entryData['id'], $entryTableData ) ) :
         // There are tags
-        if ( ! empty($tags) ):
-          $sqlCom->insertOrUpdateTags( $entryID, $tags );
+        if ( ! empty($tagNames) ):
+          $sqlCom->insertOrUpdateTag( $entryID, $tagNames );
         endif;
     endif;
     // Redirect to detail page using newly inserted id
@@ -28,9 +28,9 @@ endif;
                     <textarea id="resources-to-remember" rows="5" name="resourcesToRemember"><?php echo $entryData['resources'] ?></textarea>
                     <label for="tags">Tags( 1 per line )</label>
                     <textarea id="tags" rows="5" name="tags"><?php
-                        $tags = $sqlCom->getTagsForEntry($entryID);
-                        if ( count($tags) >= 1 && $tags[0] != FALSE):
-                            foreach ( $tags as $tag) {
+                        $tagNames = $sqlCom->getTagsForEntry($entryID);
+                        if ( count($tagNames) >= 1 && $tagNames[0] != FALSE):
+                            foreach ($tagNames as $tag) {
                                 echo "\r\n".$tag['name'];
                             }
                         endif;

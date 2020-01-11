@@ -257,6 +257,21 @@ ul.tags a:hover{
 	margin-left: 15px;
 }
 
+#error{
+	max-width: 800px;
+	color: white;
+	background-color: red;
+	margin: 0 auto 15px auto;
+	text-align: center;
+	border: 1px solid black;
+	border-radius: 15px;
+}
+
+#error p {
+	padding: 0 5px 0 5px;
+	line-height: 32px;
+}
+
 /* ==========================================================================
    Form Styles
    ========================================================================== */

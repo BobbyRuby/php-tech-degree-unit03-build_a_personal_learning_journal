@@ -1,59 +1,161 @@
 <?php
 include('header.php');
-// Get entryID from GET
+// Set the rest of our variables
 $entryID = filter_input(INPUT_GET, 'entryID', FILTER_VALIDATE_INT);
+$delete = filter_input(INPUT_GET, 'delete', FILTER_VALIDATE_BOOLEAN);
+$nextEntry = filter_input(INPUT_GET, 'nextEntry', FILTER_VALIDATE_BOOLEAN);
+$prevEntry = filter_input(INPUT_GET, 'prevEntry', FILTER_VALIDATE_BOOLEAN);
 
-if( ! empty($_GET['delete']) && $_GET['delete'] === 'yes' ):
+if( $delete ):
     $sqlCom->deleteRow($entryID, 'entries');
-elseif ( ! empty($_GET['nextEntry']) &&  $_GET['nextEntry'] === 'true' ) :
-    // Check to see if the next entry exists
-    if ( $row = $sqlCom->getAssocRowById($entryID+1, 'entries') ){
-        $entryID++;
-        // If it does then display reload page with proper entryID
-        header("Location: ./detail.php?entryID=$entryID");
-    }
-    else {
-        // There is not an immediate entry 1 id from here, find the next ROW
+    // Remove entryID from all tags
+    $sqlCom->removeEntryFromAllTags( $entryID );
+elseif ( $nextEntry ) :
+    // No tagID
+    if ( ! $tagID ):
+        // Check to see if the next entry exists
+        if ( $row = $sqlCom->getAssocRowById($entryID+1, 'entries') ){
+            $entryID++;
+            // If it does then display reload page with proper entryID
+            header("Location: ./detail.php?entryID=$entryID");
+        }
+        else {
+            // There is not an immediate entry 1 id from here, find the next ROW
+            // Return first entry greater than current one
+            $pdoSObj = $sqlCom->prepareAndExecuteStatement(' 
+                        SELECT *
+                        FROM entries 
+                        WHERE id > ? 
+                        ORDER BY id ASC 
+                        LIMIT 1
+                    ',
+                [$entryID]);
+            $rows = $pdoSObj[1]->fetchAll(PDO::FETCH_ASSOC);
+            if ( ! empty($rows) ):
+                $entryID = $rows[0]['id'];
+                // If it does then display reload page with proper entryID
+                header("Location: ./detail.php?entryID=$entryID");
+            else:
+                // If it does then display reload page with proper entryID
+                header("Location: ./detail.php?entryID=$entryID&no_entries_error=true");
+            endif;
+        }
+    else:
+        // There is a tagID set - we need to get a comma seperated list of entries for this tagID
+        $pdoSObj = $sqlCom->prepareAndExecuteStatement('SELECT entries FROM tags WHERE id = ?', [$tagID]);
+        $tagEntryIDs = $pdoSObj[1]->fetchAll(PDO::FETCH_ASSOC);
 
-        // Return a data set of all entries in DESC order
-        $pdoSObj = $sqlCom->prepareAndExecuteStatement('
-            SELECT * 
-            FROM ( SELECT *
-                    FROM entries 
-                    WHERE id <= ? 
-                    ORDER BY id DESC 
-                    LIMIT 1
-                )
-            UNION
-            SELECT * 
-            FROM ( SELECT *
-                    FROM entries 
-                    WHERE id >= ? 
-                    ORDER BY id ASC 
-                    LIMIT 1
-                )',
-            [$entryID, $entryID]);
+        $tagEntryIDs = explode("," ,$tagEntryIDs[0]['entries']);
+        // Perform multi select
+        $sql =
+            'SELECT *
+            FROM ( 
+                SELECT * 
+                FROM entries
+                WHERE';
+        $count = count($tagEntryIDs);
+        // Loop through this list and build a = sql for second select
+        foreach ( $tagEntryIDs as $index => $tagEntryID ){
+            // If not last iteration
+            if ($index !== $count - 1):
+                $sql .= " id = ? OR";
+            else:
+                $sql .= " id = ?";
+            endif;
+        }
+        $sql .= ') AS tbl WHERE id > ? ORDER BY date LIMIT 1';
+        // Push this entryID on for final WHERE
+        $tagEntryIDs [] = $entryID;
+        // Return first entry greater than current one
+        $pdoSObj = $sqlCom->prepareAndExecuteStatement($sql, $tagEntryIDs);
+
         $rows = $pdoSObj[1]->fetchAll(PDO::FETCH_ASSOC);
 
+        if ( ! empty($rows) ):
+            $entryID = $rows[0]['id'];
+            // If it does then display reload page with proper entryID
+            header("Location: ./detail.php?entryID=$entryID&tagID=$tagID");
+        else:
+            // If it does then display reload page with proper entryID
+            header("Location: ./detail.php?entryID=$entryID&tagID=$tagID&no_entries_error=true");
+        endif;
+    endif;
+elseif ( $prevEntry ) :
+    if ( ! $tagID ):
+        // Check to see if the next entry exists
+        if ( $row = $sqlCom->getAssocRowById($entryID-1, 'entries') ){
+            $entryID--;
+            // If it does then display reload page with proper entryID
+            header("Location: ./detail.php?entryID=$entryID");
+        }
+        else {
+            // There is not an immediate entry 1 id from here, find the next ROW
+            // Return first entry less than current one
+            $pdoSObj = $sqlCom->prepareAndExecuteStatement(' 
+                        SELECT *
+                        FROM entries 
+                        WHERE id < ? 
+                        ORDER BY id DESC 
+                        LIMIT 1
+                    ',
+                [$entryID]);
+            $rows = $pdoSObj[1]->fetchAll(PDO::FETCH_ASSOC);
+            if ( ! empty($rows) ):
+                $entryID = $rows[0]['id'];
+                // If it does then display reload page with proper entryID
+                header("Location: ./detail.php?entryID=$entryID");
+            else:
+                // If it does then display reload page with proper entryID
+                header("Location: ./detail.php?entryID=$entryID&no_entries_error=true");
+            endif;
+        }
+    else:
+        // There is a tagID set - we need to get a comma seperated list of entries for this tagID
+        $pdoSObj = $sqlCom->prepareAndExecuteStatement('SELECT entries FROM tags WHERE id = ?', [$tagID]);
+        $tagEntryIDs = $pdoSObj[1]->fetchAll(PDO::FETCH_ASSOC);
 
-    }
-elseif ( ! empty($_GET['prevEntry']) &&  $_GET['prevEntry'] === 'true'  ) :
-    // Check to see if the next entry exists
-    if ( $row = $sqlCom->getAssocRowById($entryID-1, 'entries') ){
-        $entryID--;
-        // If it does then display reload page with proper entryID
-        header("Location: ./detail.php?entryID=$entryID");
-    }
-    else {
+        $tagEntryIDs = explode("," ,$tagEntryIDs[0]['entries']);
+        // Perform multi select
+        $sql =
+            'SELECT *
+            FROM ( 
+                SELECT * 
+                FROM entries
+                WHERE';
+        $count = count($tagEntryIDs);
+        // Loop through this list and build a = sql for second select
+        foreach ( $tagEntryIDs as $index => $tagEntryID ){
+            // If not last iteration
+            if ($index !== $count - 1):
+                $sql .= " id = ? OR";
+            else:
+                $sql .= " id = ?";
+            endif;
+        }
+        $sql .= ') AS tbl WHERE id < ? ORDER BY date LIMIT 1';
+        // Push this entryID on for final WHERE
+        $tagEntryIDs [] = $entryID;
+        // Return first entry greater than current one
+        $pdoSObj = $sqlCom->prepareAndExecuteStatement($sql, $tagEntryIDs);
 
-    }
+        $rows = $pdoSObj[1]->fetchAll(PDO::FETCH_ASSOC);
 
+        if ( ! empty($rows) ):
+            $entryID = $rows[0]['id'];
+            // If it does then display reload page with proper entryID
+            header("Location: ./detail.php?entryID=$entryID&tagID=$tagID");
+        else:
+            // If it does then display reload page with proper entryID
+            header("Location: ./detail.php?entryID=$entryID&tagID=$tagID&no_entries_error=true");
+        endif;
+    endif;
 endif;
 $entryData = $sqlCom->getAssocRowById($entryID, 'entries');
+
 ?>
 
-                    <h1><?php echo $entryData['title'] ?></h1>
-                    <time datetime="<?php echo $entryData['date'] ?>"><?php echo convertDateTime($entryData['date']) ?></time>
+                    <h2><?php echo $entryData['title'] ?></h2>
+                    <time datetime="<?php echo $entryData['date'] ?>"><?php if ( ! empty ($row['date']) ) : echo convertDateTime($row['date']); else: echo 'No date recored'; endif; ?></time>
                     <div class="entry">
                         <h3>Time Spent: </h3>
                         <p><?php echo $entryData['time_spent'] ?></p>
@@ -111,8 +213,18 @@ $entryData = $sqlCom->getAssocRowById($entryID, 'entries');
             </div>
         </div>
         <div class="edit">
-            <p><a class="button" href="./detail.php?entryID=<?php echo $entryID ?>&nextEntry=true">Next Entry</a></p>
-            <p><a class="button" href="./detail.php?entryID=<?php echo $entryID ?>&prevEntry=true">Previous Entry</a></p>
+            <p><a class="button" href="./detail.php?entryID=<?php
+                echo $entryID;
+                if ( $tagID ):
+                    echo "&tagID=$tagID";
+                endif;
+                ?>&nextEntry=true">Next Entry</a></p>
+            <p><a class="button" href="./detail.php?entryID=<?php
+                echo $entryID;
+                if ( $tagID ):
+                    echo "&tagID=$tagID";
+                endif;
+                ?>&prevEntry=true">Previous Entry</a></p>
             <p><a class="button" href="./edit.php?entryID=<?php echo $entryID ?>">Edit Entry</a></p>
             <p><a class="button red" href="./detail.php?delete=yes&entryID=<?php echo $entryID ?>"
                   onclick="return confirm('Are you sure you want to delete this entry?')">
