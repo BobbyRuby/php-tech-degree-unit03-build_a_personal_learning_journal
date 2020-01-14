@@ -7,7 +7,7 @@ if( ! empty($_POST) ){
     if( $insertId = $sqlCom->insertEntry($entryTableData) ) :
         // There are tags
         if ( ! empty($tagNames) ):
-            $sqlCom->insertOrUpdateTag( $entryID, $tagNames, TRUE );
+            $sqlCom->insertOrUpdateTag( $entryID, $tagNames);
         endif;
     endif;
     // Redirect to detail page using newly inserted entry

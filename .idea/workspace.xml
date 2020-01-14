@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="33d0cea6-dd41-4ba0-907e-1009ed69feaa" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/296730ef-9133-4c95-b5b3-c846893d23a3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/42c55d64-8ced-4f4c-8838-44e5bc23a911.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/css/site.css" beforeDir="false" afterPath="$PROJECT_DIR$/css/site.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/edit.php" beforeDir="false" afterPath="$PROJECT_DIR$/edit.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/header.php" beforeDir="false" afterPath="$PROJECT_DIR$/header.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/inc/journal.db" beforeDir="false" afterPath="$PROJECT_DIR$/inc/journal.db" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/new.php" beforeDir="false" afterPath="$PROJECT_DIR$/new.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -119,7 +117,9 @@
       <workItem from="1578531690996" duration="1705000" />
       <workItem from="1578533413213" duration="56296000" />
       <workItem from="1578698341153" duration="8543000" />
-      <workItem from="1578713182342" duration="33472000" />
+      <workItem from="1578713182342" duration="33635000" />
+      <workItem from="1578981404404" duration="60000" />
+      <workItem from="1578981489724" duration="231000" />
     </task>
     <servers />
   </component>

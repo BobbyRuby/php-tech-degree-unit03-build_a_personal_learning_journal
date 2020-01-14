@@ -155,7 +155,7 @@ $entryData = $sqlCom->getAssocRowById($entryID, 'entries');
 ?>
 
                     <h2><?php echo $entryData['title'] ?></h2>
-                    <time datetime="<?php echo $entryData['date'] ?>"><?php if ( ! empty ($row['date']) ) : echo convertDateTime($row['date']); else: echo 'No date recored'; endif; ?></time>
+                    <time datetime="<?php echo $entryData['date'] ?>"><?php if ( ! empty ($entryData['date']) ) : echo convertDateTime($entryData['date']); else: echo 'No date recored'; endif; ?></time>
                     <div class="entry">
                         <h3>Time Spent: </h3>
                         <p><?php echo $entryData['time_spent'] ?></p>
